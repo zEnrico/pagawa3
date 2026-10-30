@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grade Evaluation</title>
+    <style>
+        * { font-family: Arial, sans-serif;  }
+        table { border-collapse: collapse; margin-bottom: 20px; }
+        th, td { border: 1px solid #000000; padding: 6px 12px; text-align: center; }
+        th { background: #ffffff; }
+    </style>
+</head>
+<body>
+    <h1>Grade Evaluation</h1>
+    <button onclick="startEvaluation()">Evaluate Grade</button>
+    <div id="output"></div>
+
+<script>
+    function evaluateGrade() {
+    // 1. num of students
+        const sc = parseInt(prompt("How many students are there?"));
+        let rows = "";
+        let highestAvg = 0;
+        let highestName = "";
+        let passedCount = 0;   // 8. counter
+        let failedCount = 0;
+        let totalAvg = 0;      // 9. sum of all averages
+        for (let i = 1; i <= sc; i++) {
+    // 2. name n grade
+            const name = prompt("What is the name of student " + i + "?");
+            const math = parseFloat(prompt("What is the Mathematics grade of " + name + "?"));
+            const science = parseFloat(prompt("What is the Science grade of " + name + "?"));
+            const english = parseFloat(prompt("What is the English grade of " + name + "?"));
+    // 3. avg
+            const avg = (math + science + english) / 3;
+    // 4. pass/fail
+            let remark;
+            if (avg >= 75 && math >= 75 && science >= 75 && english >= 75) {
+                remark = "Passed";
+                passedCount++;
+            } else {
+                remark = "Failed";
+                failedCount++;
+            }
+    // 5. perf
+            let rating;
+            if (avg >= 95 && avg <= 100) {
+                rating = "A+";
+            } else if (avg >= 90 && avg < 95) {
+                rating = "A";
+            } else if (avg >= 85 && avg < 90) {
+                rating = "B";
+            } else if (avg >= 80 && avg < 85) {
+                rating = "C";
+            } else if (avg >= 75 && avg < 80) {
+                rating = "D";
+            } else {
+                rating = "F";
+            }
+    // 6. switch
+            let standing;
+            switch (rating) {
+                case "A+":
+                    standing = "With High Honors!";
+                    break;
+                case "A":
+                    standing = "With Honors!";
+                    break;
+                case "B":
+                    standing = "Very Satisfactory";
+                    break;
+                case "C":
+                case "D":
+                    standing = "Satisfactory";
+                    break;
+                default:
+                    standing = "Failed";
+            }
+    // 7. highest avg
+            if (avg > highestAvg) {
+                highestAvg = avg;
+                highestName = name;
+            }
+    // 9. 
+            totalAvg += avg;
+            rows += "<tr>" +
+                        "<td>" + name + "</td>" +
+                        "<td>" + math + "</td>" +
+                        "<td>" + science + "</td>" +
+                        "<td>" + english + "</td>" +
+                        "<td>" + avg.toFixed(2) + "</td>" +
+                        "<td>" + remark + "</td>" +
+                        "<td>" + rating + "</td>" +
+                        "<td>" + standing + "</td>" +
+                    "</tr>";
+        }
+    //  class avg
+        const classAvg = totalAvg / sc;
+    // table + summary 
+        document.getElementById("output").innerHTML =
+            "<table>" +
+                "<tr>" +
+                    "<th>Name</th>" +
+                    "<th>Math</th>" +
+                    "<th>Science</th>" +
+                    "<th>English</th>" +
+                    "<th>Average</th>" +
+                    "<th>Remarks</th>" +
+                    "<th>Rating</th>" +
+                    "<th>Standing</th>" +
+                "</tr>" +
+                rows +
+            "</table>" +
+            "<h2>Class Performance Summary</h2>" +
+            "<p><b>Total Passed</b><br>" + passedCount + "</p>" +
+            "<p><b>Total Failed</b><br>" + failedCount + "</p>" +
+            "<p><b>Class Average</b><br>" + classAvg.toFixed(2) + "</p>" +
+            "<p><b>Highest Average</b><br>" + highestAvg.toFixed(2) + "<br>" + highestName + "</p>";
+    }
+    // 10. repeat
+    function startEvaluation() {
+        let again = "yes";
+        while (again === "yes") {
+            evaluateGrade();
+            again = (prompt("Evaluate another class? (yes/no)") || "no");
+        }
+    }
+</script>
+</body>
+</html>
